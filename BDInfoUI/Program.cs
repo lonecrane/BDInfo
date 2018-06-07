@@ -21,6 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
+using System.ComponentModel;
+using System.Runtime.Serialization;
+
 namespace BDInfo
 {
     static class Program
@@ -31,9 +34,19 @@ namespace BDInfo
         [STAThread]
         static void Main(string[] args)
         {
+#if false
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain(args));
+#else
+            FormMain main = (FormMain)FormatterServices.GetUninitializedObject(typeof(FormMain));
+            System.Console.WriteLine("Please wait while we scan the disc...");
+            DoWorkEventArgs eventArgs = new DoWorkEventArgs(args[0]);
+            main.InitBDROMWork(null, eventArgs);
+            main.LoadPlaylists();
+            main.ScanBDROMWork(null, null);
+            main.GenerateReportCLI(args[0]);
+#endif
         }
     }
 }

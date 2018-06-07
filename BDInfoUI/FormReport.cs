@@ -37,20 +37,20 @@ namespace BDInfo
         public void Generate(
             BDROM BDROM,
             List<TSPlaylistFile> playlists,
-            ScanBDROMResult scanResult)
+            ScanBDROMResult scanResult, String savePath = null)
         {
             Playlists = playlists;
 
             StreamWriter reportFile = null;
-            if (BDInfoSettings.AutosaveReport)
+            if (BDInfoSettings.AutosaveReport || savePath != null)
             {
                 string reportName = string.Format(  CultureInfo.InvariantCulture,
                                                     "BDINFO.{0}.txt",
                                                     BDROM.VolumeLabel);
                 
-                reportFile = File.CreateText(Path.Combine(Environment.CurrentDirectory, reportName));
+                reportFile = File.CreateText(Path.Combine(savePath, reportName));
             }
-            textBoxReport.Text = "";
+//            textBoxReport.Text = "";
 
             string report = "";
             string protection = (BDROM.IsBDPlus ? "BD+" : BDROM.IsUHD ? "AACS2" : "AACS");
@@ -144,7 +144,7 @@ namespace BDInfo
             {
                 string summary = "";
 
-                comboBoxPlaylist.Items.Add(playlist);
+//                comboBoxPlaylist.Items.Add(playlist);
 
                 string title = playlist.Name;
                 string discSize = string.Format(            CultureInfo.InvariantCulture,
@@ -1073,32 +1073,33 @@ namespace BDInfo
                     report += "\r\n";
                 }
 
-                if (BDInfoSettings.AutosaveReport && reportFile != null)
+                if ((BDInfoSettings.AutosaveReport || savePath != null) && reportFile != null)
                 {
                     try { reportFile.Write(report); }
                     catch { }
                 }
-                textBoxReport.Text += report;
+//                textBoxReport.Text += report;
                 report = "";
                 GC.Collect();
             }
 
-            if (BDInfoSettings.AutosaveReport && reportFile != null)
+            if ((BDInfoSettings.AutosaveReport || savePath != null) && reportFile != null)
             {
                 try { reportFile.Write(report); }
                 catch { }
 
             }
-            textBoxReport.Text += report;
+//            textBoxReport.Text += report;
 
             if (reportFile != null)
             {
                 reportFile.Close();
             }
-
+#if false
             textBoxReport.Select(0, 0);
             comboBoxPlaylist.SelectedIndex = 0;
             comboBoxChartType.SelectedIndex = 0;
+#endif
         }
 
         private void buttonCopy_Click(
