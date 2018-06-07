@@ -571,7 +571,30 @@ namespace BDInfo
             return resp;
         }
 
-        public void LoadPlaylists()
+        public void LoadPlaylists(List<String> inputPlaylists)
+        {
+            selectedPlaylists = new List<TSPlaylistFile>();
+            foreach (String playlistName in inputPlaylists)
+            {
+                String Name = playlistName.ToUpper();
+                if (BDROM.PlaylistFiles.ContainsKey(Name))
+                {
+                    if (!selectedPlaylists.Contains(BDROM.PlaylistFiles[Name]))
+                    {
+                        selectedPlaylists.Add(BDROM.PlaylistFiles[Name]);
+                    }
+                }
+            }
+
+            // throw error if no playlist is found
+            if (selectedPlaylists.Count == 0)
+            {
+                throw new Exception("No matching playlists found on BD");
+            }
+        }
+
+
+        public void LoadPlaylists(bool wholeDisc = false)
         {
 #if false
             listViewPlaylistFiles.Items.Clear();
@@ -648,6 +671,8 @@ namespace BDInfo
                     if (!playlist.IsValid) continue;
 
                     playlistDict[playlistIdx] = playlist;
+                    if (wholeDisc)
+                        selectedPlaylists.Add(playlist);
 
                     if (playlist.HasHiddenTracks)
                     {
@@ -764,6 +789,9 @@ namespace BDInfo
             {
                 System.Console.WriteLine("(*) Some playlists on this disc have hidden tracks. These tracks are marked with an asterisk.");
             }
+            if (wholeDisc)
+                return;
+
             for (int selectedIdx; (selectedIdx = getIntIndex(1, playlistIdx - 1)) > 0; ) {
                 selectedPlaylists.Add(playlistDict[selectedIdx]);
                 System.Console.WriteLine(String.Format("Added {0}", selectedIdx));
