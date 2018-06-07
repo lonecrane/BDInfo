@@ -2,7 +2,9 @@ BDInfoCLI-ng
 ======
 
 Original source origin: http://www.cinemasquid.com/blu-ray/tools/bdinfo
+
 BDInfoCLI-ng forked from: https://github.com/UniqProject/BDInfo
+
 Additional sources from BDInfoCLI (https://github.com/Tripplesixty/BDInfoCLI)
 
 BDInfoCLI-ng is the latest BDInfo (with UHD support) modified for use as a CLI utility. BDInfoCLI-ng implements an interface similar to BDInfoCLI, but on the latest BDInfo code base and with code changes designed to be as minimally invasive as possible for easier maintainability with BDInfo updates.
@@ -68,7 +70,7 @@ Wrapper script example:
 Alternatively, you can build and run the Docker container yourself, e.g:
 ```
 docker build -t bdinfocli-ng .
-docker run --rm --it -v host_dir:/mnt /mnt/disc
+docker run --rm --it -v <host_dir>:/mnt /mnt/disc
 ```
 
 Mac
