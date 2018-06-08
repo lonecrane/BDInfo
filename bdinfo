@@ -41,13 +41,13 @@ if [ -n "$source_path" ]; then
 	dest_mount_arg="/mnt/report"
 fi
 
-docker run --rm -it --user $(id -u) \
-	${source_mount_docker_arg[@]} \
-	${dest_mount_docker_arg[@]} \
-	zoffline/bdinfocli-ng \
+docker run --rm --user $(id -u) \
+	"${source_mount_docker_arg[@]}" \
+	"${dest_mount_docker_arg[@]}" \
+	-it zoffline/bdinfocli-ng \
 	$HELP \
 	$VERSION \
 	${MPLS[@]} \
 	$WHOLE \
-	$source_mount_arg \
-	$dest_mount_arg
+	"$source_mount_arg" \
+	"$dest_mount_arg"
