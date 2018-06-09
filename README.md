@@ -53,6 +53,8 @@ Windows
 
 BDInfoCLI-ng can be built using the free tool <a href="https://www.visualstudio.com/vs/community/">Microsoft Visual Studio Community Edition</a>. Just install Visual Studio, open ```BDInfo.sln```, and build.
 
+If you don't wish to build it yourself, you can use the prebuilt verson in the prebuilt directory or download it directly from <a href="https://raw.githubusercontent.com/zoffline/BDInfoCLI-ng/UHD_Support_CLI/prebuilt/BDInfoCLI-ng_0.7.3.zip">here</a>.
+
 
 Linux
 ======
@@ -60,7 +62,7 @@ BDInfoCLI-ng can be built and run with <a href="https://www.mono-project.com/">M
 
 Using Docker is highly recommend (nobody should have to taint their OS with Mono).
 
-To do so install Docker and then simply use the included ``bdinfo`` wrapper script. The wrapper script automatically handles mounting the necessary directories into the container. The first run will be slow as the container image will have to be downloaded, subsequent runs will not be.
+To do so install Docker and then simply use the included ``bdinfo`` wrapper script inside the ``scripts`` directory. The wrapper script automatically handles mounting the necessary directories into the container. The first run will be slow as the container image will have to be downloaded, subsequent runs will not be.
 
 Wrapper script example:
 ```
@@ -72,6 +74,8 @@ Alternatively, you can build and run the Docker container yourself, e.g:
 docker build -t bdinfocli-ng .
 docker run --rm --it -v <host_dir>:/mnt /mnt/disc
 ```
+
+Without Docker you will need to build it and run it yourself with Mono (see the Dockerfile for details on how that's done).
 
 Mac
 ======
