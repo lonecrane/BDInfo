@@ -3,8 +3,8 @@
 # Docker Wrapper script for easy use
 
 if [ $# -eq 0 ]; then
-	docker run --rm -it --user $(id -u) bdinfo
-	return 1
+	docker run --rm -it --user $(id -u) zoffline/bdinfocli-ng
+	exit 1
 fi
 
 LONG_OPTS="help,list,mpls:,whole,version"
@@ -36,6 +36,10 @@ if [ -n "$source_path" ]; then
 	source_mount_arg="/mnt/bd/$source_base"
 
 	# Default to source_path if $2 not given
+	if [[ -z "$2" && ! -d "$source_path" ]]; then
+		echo "error: REPORT_DEST must be given if BD_PATH is an ISO."
+		exit 1
+	fi
 	dest_path=$(readlink -f "${2:-$1}")
 	dest_mount_docker_arg=("-v" "$dest_path:/mnt/report")
 	dest_mount_arg="/mnt/report"

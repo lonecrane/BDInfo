@@ -24,6 +24,7 @@ using System.Windows.Forms;
 
 using Mono.Options;
 using System.ComponentModel;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -36,7 +37,11 @@ namespace BDInfo
         {
             if (msg != null)
                 Console.Error.WriteLine(msg);
-            Console.Error.WriteLine("BDInfo.exe <BD_FOLDER> [REPORT_DEST]");
+            Console.Error.WriteLine("Usage: BDInfo.exe <BD_PATH> [REPORT_DEST]");
+            Console.Error.WriteLine("BD_PATH may be a directory containing a BDMV folder or a BluRay ISO file.");
+            Console.Error.WriteLine("REPORT_DEST is the folder the BDInfo report is to be written to. If not");
+            Console.Error.WriteLine("given, the report will be written to BD_PATH. REPORT_DEST is required if");
+            Console.Error.WriteLine("BD_PATH is an ISO file.\n");
             option_set.WriteOptionDescriptions(Console.Error);
             Environment.Exit(-1);
         }
@@ -87,19 +92,25 @@ namespace BDInfo
             if (list)
                 whole = true;
 
-            if (nsargs.Count == 0)
+            if (nsargs.Count == 0) {
                 show_help(option_set, "Error: insufficient args - usage is:");
+                Environment.Exit(-1);
+            }
 
             string bdPath = nsargs[0];
-            if (!System.IO.Directory.Exists(bdPath))
+            if (!File.Exists(bdPath) && !Directory.Exists(bdPath))
             {
-                Console.Error.WriteLine(String.Format("error: {0} does not exist or is not a directory", bdPath));
+                Console.Error.WriteLine(String.Format("error: {0} does not exist", bdPath));
                 Environment.Exit(-1);
             }
             string reportPath = bdPath;
+            if (nsargs.Count == 1 && !Directory.Exists(bdPath)) {
+                Console.Error.WriteLine(String.Format("error: REPORT_DEST must be given if BD_PATH is an ISO.", bdPath));
+                Environment.Exit(-1);
+            }
             if (nsargs.Count == 2)
                 reportPath = nsargs[1];
-            if (!System.IO.Directory.Exists(reportPath))
+            if (!Directory.Exists(reportPath))
             {
                 Console.Error.WriteLine(String.Format("error: {0} does not exist or is not a directory", reportPath));
                 Environment.Exit(-1);
