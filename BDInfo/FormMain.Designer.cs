@@ -503,8 +503,9 @@ namespace BDInfo
             this.Controls.Add(this.textBoxSource);
             this.Controls.Add(this.labelSource);
             this.DoubleBuffered = true;
+            this.KeyPreview = true;
             this.Name = "FormMain";
-            this.Text = "BDInfo v.0.7.4b";
+            this.Text = "BDInfo";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.LocationChanged += new System.EventHandler(this.FormMain_LocationChanged);

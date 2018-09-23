@@ -42,6 +42,17 @@ namespace BDInfo
 
         private ListViewColumnSorter PlaylistColumnSorter;
 
+        public static Control FindFocusedControl(Control control)
+        {
+            var container = control as IContainerControl;
+            while (container != null)
+            {
+                control = container.ActiveControl;
+                container = control as IContainerControl;
+            }
+            return control;
+        }
+
         public FormMain(string[] args)
         {
             InitializeComponent();
@@ -59,11 +70,56 @@ namespace BDInfo
                 textBoxSource.Text = BDInfoSettings.LastPath;
             }
             this.Icon = BDInfo.Properties.Resources.Bluray_disc;
+
+            Text += String.Format(" v{0}", Application.ProductVersion);
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
             ResetColumnWidths();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.C))
+            {
+                Control focusedControl = FindFocusedControl(this);
+
+                Clipboard.Clear();
+
+                if (focusedControl == listViewPlaylistFiles && listViewPlaylistFiles.SelectedItems.Count > 0)
+                {
+                    ListViewItem playlistItem = listViewPlaylistFiles.SelectedItems[0];
+                    if (playlistItem != null)
+                    {
+                        TSPlaylistFile playlist = null;
+                        string playlistFileName = playlistItem.Text;
+                        if (BDROM.PlaylistFiles.ContainsKey(playlistFileName))
+                        {
+                            playlist = BDROM.PlaylistFiles[playlistFileName];
+                        }
+                        if (playlist != null)
+                          Clipboard.SetText(playlist.GetFilePath());
+                    }
+                }
+                if (focusedControl == listViewStreamFiles && listViewStreamFiles.SelectedItems.Count > 0)
+                {
+                    ListViewItem streamFileItem = listViewStreamFiles.SelectedItems[0];
+                    if (streamFileItem != null)
+                    {
+                        TSStreamFile streamFile = null;
+                        string streamFileName = streamFileItem.Text;
+                        if (BDROM.StreamFiles.ContainsKey(streamFileName))
+                        {
+                            streamFile = BDROM.StreamFiles[streamFileName];
+                        }
+                        if (streamFile != null)
+                            Clipboard.SetText(streamFile.GetFilePath());
+                    }
+                }
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void textBoxSource_TextChanged(object sender, EventArgs e)
@@ -441,19 +497,27 @@ namespace BDInfo
             labelTimeElapsed.Text = "00:00:00";
             labelTimeRemaining.Text = "00:00:00";
 
+            if (!string.IsNullOrEmpty(BDROM.DiscTitle))
+            {
+                textBoxDetails.Text += string.Format(CultureInfo.InvariantCulture,
+                                                    "Disc Title: {0}{1}",
+                                                    BDROM.DiscTitle,
+                                                    Environment.NewLine);
+            }
+
             if (!BDROM.IsImage)
             {
                 textBoxSource.Text = BDROM.DirectoryRoot.FullName;
-                textBoxDetails.Text += string.Format(
-                    "Detected BDMV Folder: {0} ({1}) {2}",
-                    BDROM.DirectoryBDMV.FullName,
-                    BDROM.VolumeLabel,
-                    Environment.NewLine);
+                textBoxDetails.Text += string.Format(CultureInfo.InvariantCulture,
+                                                    "Detected BDMV Folder: {0} (Disc Label: {1}){2}",
+                                                    BDROM.DirectoryBDMV.FullName,
+                                                    BDROM.VolumeLabel,
+                                                    Environment.NewLine);
             }
             else
             {
                 textBoxDetails.Text += string.Format(CultureInfo.InvariantCulture, 
-                                                    "Detected BDMV Folder: {0} ({1}) {3} ISO Image: {2} {3}",
+                                                    "Detected BDMV Folder: {0} (Disc Label: {1}){3}ISO Image: {2}{3}",
                                                     BDROM.DiscDirectoryBDMV.FullName,
                                                     BDROM.VolumeLabel,
                                                     textBoxSource.Text,
