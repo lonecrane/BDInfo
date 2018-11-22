@@ -62,6 +62,8 @@ BDInfoCLI-ng can be built using the free tool <a href="https://www.visualstudio.
 
 If you don't wish to build it yourself, you can use the prebuilt verson in the prebuilt directory or download it directly from <a href="https://raw.githubusercontent.com/zoffline/BDInfoCLI-ng/UHD_Support_CLI/prebuilt/BDInfoCLI-ng_0.7.3.zip">here</a>.
 
+Note: As of v0.7.5.3 I can build and run BDInfoCLI-ng within Visual Studio just fine, but attempting to run it outside Visual Studio and from the command line results in no output. WinDbg is of no help. As such, further prebuilts after v0.7.3 will not be available. I'm done with this PoS operating system. If you have a fix/solution, please create a merge request or issue. Fuck Windows. 
+
 
 Linux
 ======
