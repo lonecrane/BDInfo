@@ -60,7 +60,7 @@ Windows
 
 BDInfoCLI-ng can be built using the free tool <a href="https://www.visualstudio.com/vs/community/">Microsoft Visual Studio Community Edition</a>. Just install Visual Studio, open ```BDInfo.sln```, and build.
 
-If you don't wish to build it yourself, you can use the prebuilt verson in the prebuilt directory or download it directly from <a href="https://raw.githubusercontent.com/zoffline/BDInfoCLI-ng/UHD_Support_CLI/prebuilt/BDInfoCLI-ng_0.7.3.zip">here</a>.
+If you don't wish to build it yourself, you can use the prebuilt verson in the prebuilt directory or download it directly from <a href="https://raw.githubusercontent.com/zoffline/BDInfoCLI-ng/UHD_Support_CLI/prebuilt/BDInfoCLI-ng_v0.7.5.5.zip">here</a>.
 
 
 Linux
