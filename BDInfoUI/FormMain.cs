@@ -18,7 +18,6 @@
 //=============================================================================
 
 using BDInfo.IO;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -168,27 +167,41 @@ namespace BDInfo
             string path = null;
             try
             {
-                CommonOpenFileDialog openDialog = new CommonOpenFileDialog();
                 if (((Button) sender).Name == "buttonBrowse")
                 {
-                    openDialog.IsFolderPicker = true;
-                    openDialog.Title = "Select a BluRay BDMV Folder:";
+                    using (var dialog = new FolderBrowserDialog())
+                    {
+                        dialog.Description = "Select a BluRay BDMV Folder:";
+                        if (!string.IsNullOrEmpty(textBoxSource.Text))
+                        {
+                            dialog.SelectedPath = textBoxSource.Text;
+                        }
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            path = dialog.SelectedPath;
+                        }
+                    }
                 }
                 else
                 {
-                    openDialog.IsFolderPicker = false;
-                    openDialog.Title = "Select a BluRay .ISO file:";
-                    openDialog.Filters.Add(new CommonFileDialogFilter("ISO-Image", ".iso"));
+                    using (var dialog = new OpenFileDialog())
+                    {
+                        dialog.Title = "Select a BluRay .ISO file:";
+                        dialog.Filter = "ISO-Image|*.iso";
+                        dialog.RestoreDirectory = true;
+                        if (!string.IsNullOrEmpty(textBoxSource.Text))
+                        {
+                            dialog.InitialDirectory = textBoxSource.Text;
+                        }
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            path = dialog.FileName;
+                        }
+                    }
                 }
-                
 
-                if (!string.IsNullOrEmpty(textBoxSource.Text))
+                if (!string.IsNullOrEmpty(path))
                 {
-                    openDialog.InitialDirectory = textBoxSource.Text;
-                }
-                if (openDialog.ShowDialog() == CommonFileDialogResult.Ok)
-                {
-                    path = openDialog.FileName;
                     textBoxSource.Text = path;
                     InitBDROM(path);
                 }
