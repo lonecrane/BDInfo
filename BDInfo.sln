@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BDInfo", "BDInfo\BDInfo.csproj", "{ED2D8B82-98D4-415F-A503-47944FB793F9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BDInfoUI", "BDInfoUI\BDInfoUI.csproj", "{C1FEFD0E-1575-4598-AD00-DEF9F0CADB6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{ED2D8B82-98D4-415F-A503-47944FB793F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED2D8B82-98D4-415F-A503-47944FB793F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED2D8B82-98D4-415F-A503-47944FB793F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1FEFD0E-1575-4598-AD00-DEF9F0CADB6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1FEFD0E-1575-4598-AD00-DEF9F0CADB6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1FEFD0E-1575-4598-AD00-DEF9F0CADB6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1FEFD0E-1575-4598-AD00-DEF9F0CADB6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

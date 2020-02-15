@@ -7,6 +7,7 @@
     <ApplicationIcon>Resources\Toma4025-Rumax-Bluray-disc.ico</ApplicationIcon>
     <Win32Resource />
     <StartupObject />
+    <ApplicationManifest>BDInfoUI.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
