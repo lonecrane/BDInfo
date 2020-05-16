@@ -79,7 +79,7 @@ Wrapper script example:
 Alternatively, you can build and run the Docker container yourself, e.g:
 ```
 docker build -t bdinfocli-ng .
-docker run --rm --it -v <host_dir>:/mnt /mnt/disc
+docker run --rm -it -v <host_dir>:/mnt bdinfocli-ng /mnt
 ```
 
 Without Docker you will need to build it and run it yourself with Mono (see the Dockerfile for details on how that's done).
