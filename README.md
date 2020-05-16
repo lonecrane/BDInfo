@@ -76,10 +76,13 @@ Wrapper script example:
 ./bdinfo --help
 ```
 
-Alternatively, you can build and run the Docker container yourself, e.g:
+Alternatively, you can run the Docker container yourself, e.g:
 ```
-docker build -t bdinfocli-ng .
-docker run --rm -it -v <host_dir>:/mnt bdinfocli-ng /mnt
+docker run --rm -it -v <BD_PATH>:/mnt/bd zoffline/bdinfocli-ng /mnt/bd
+```
+or, with a ``REPORT_DEST``:
+```
+docker run --rm -it -v <BD_PATH>:/mnt/bd -v <REPORT_DEST>:/mnt/report zoffline/bdinfocli-ng /mnt/bd /mnt/report
 ```
 
 Without Docker you will need to build it and run it yourself with Mono (see the Dockerfile for details on how that's done).
