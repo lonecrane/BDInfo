@@ -22,17 +22,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using DiscUtils;
-using DiscUtils.Udf;
+using BDInfo.IO;
 
 namespace BDInfo
 {
     public class TSStreamClipFile
     {
-        public DiscFileInfo DFileInfo = null;
-        public UdfReader CdReader = null;
-
-        public FileInfo FileInfo = null;
+        public IFileInfo FileInfo = null;
         public string FileType = null;
         public bool IsValid = false;
         public string Name = null;
@@ -40,27 +36,15 @@ namespace BDInfo
         public Dictionary<ushort, TSStream> Streams =
             new Dictionary<ushort,TSStream>();
 
-        public TSStreamClipFile(FileInfo fileInfo)
+        public TSStreamClipFile(IFileInfo fileInfo)
         {
             FileInfo = fileInfo;
-            DFileInfo = null;
-            CdReader = null;
-            Name = fileInfo.Name.ToUpper();
-        }
-
-        public TSStreamClipFile(DiscFileInfo fileInfo,
-            UdfReader reader)
-        {
-            DFileInfo = fileInfo;
-            FileInfo = null;
-            CdReader = reader;
             Name = fileInfo.Name.ToUpper();
         }
 
         public void Scan()
         {
-            FileStream fileStream = null;
-            Stream discFileStream = null;
+            Stream fileStream = null;
             BinaryReader fileReader = null;
             ulong streamLength = 0;
 
@@ -74,16 +58,9 @@ namespace BDInfo
 
                 if (FileInfo != null)
                 {
-                    fileStream = File.OpenRead(FileInfo.FullName);
+                    fileStream = FileInfo.OpenRead();
                     fileReader = new BinaryReader(fileStream);
                     streamLength = (ulong)fileStream.Length;
-                }
-                else
-                {
-                    CdReader.OpenFile(DFileInfo.FullName, FileMode.Open);
-                    discFileStream = CdReader.GetFileInfo(DFileInfo.FullName).OpenRead();
-                    fileReader = new BinaryReader(discFileStream);
-                    streamLength = (ulong)discFileStream.Length;
                 }
 
                 byte[] data = new byte[streamLength];
@@ -271,7 +248,6 @@ namespace BDInfo
             {
                 if (fileReader != null) fileReader.Close();
                 if (fileStream != null) fileStream.Close();
-                if (discFileStream != null) discFileStream.Close();
             }
         }
     }
