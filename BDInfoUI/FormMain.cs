@@ -24,11 +24,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-<<<<<<< HEAD:BDInfo/FormMain.cs
 using System.Runtime.Serialization;
 using System.Text;
-=======
->>>>>>> stanionascu_nuget:BDInfoUI/FormMain.cs
 using System.Threading;
 using System.Windows.Forms;
 
