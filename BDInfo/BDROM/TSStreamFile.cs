@@ -21,8 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using DiscUtils;
-using DiscUtils.Udf;
+using BDInfo.IO;
 
 namespace BDInfo
 {
@@ -154,10 +153,7 @@ namespace BDInfo
 
     public class TSStreamFile
     {
-        public DiscFileInfo DFileInfo = null;
-        public UdfReader CdReader = null;
-
-        public FileInfo FileInfo = null;
+        public IFileInfo FileInfo = null;
         public string Name = null;
         public long Size = 0;
         public double Length = 0;
@@ -175,20 +171,9 @@ namespace BDInfo
 
         private List<TSPlaylistFile> Playlists = null;
 
-        public TSStreamFile(FileInfo fileInfo)
+        public TSStreamFile(IFileInfo fileInfo)
         {
             FileInfo = fileInfo;
-            DFileInfo = null;
-            CdReader = null;
-            Name = fileInfo.Name.ToUpper();
-        }
-
-        public TSStreamFile(DiscFileInfo fileInfo,
-            UdfReader reader)
-        {
-            DFileInfo = fileInfo;
-            FileInfo = null;
-            CdReader = reader;
             Name = fileInfo.Name.ToUpper();
         }
 
@@ -209,9 +194,6 @@ namespace BDInfo
         {
             if (!string.IsNullOrEmpty(FileInfo?.FullName))
                 return FileInfo.FullName;
-
-            if (!string.IsNullOrEmpty(DFileInfo?.FullName))
-                return DFileInfo.FullName;
 
             return string.Empty;
         }
@@ -478,37 +460,21 @@ namespace BDInfo
             int dataSize = 16384;
             Stream fileStream = null;
             try
-            {                
-                string fileName;
+            {
+                string fileName = "";
                 if (BDInfoSettings.EnableSSIF &&
                     InterleavedFile != null)
                 {
                     if (InterleavedFile.FileInfo != null)
                         fileName = InterleavedFile.FileInfo.FullName;
-                    else
-                        fileName = InterleavedFile.DFileInfo.FullName;
                 }
                 else
                 {
-                    if (FileInfo != null)
-                        fileName = FileInfo.FullName;
-                    else
-                        fileName = DFileInfo.FullName;
+                    fileName = FileInfo.FullName;
                 }
 
-                if (CdReader == null)
-                {
-                    fileStream = new FileStream(
-                        fileName,
-                        FileMode.Open,
-                        FileAccess.Read,
-                        FileShare.Read,
-                        dataSize, false);
-                }
-                else
-                {
-                    fileStream = CdReader.OpenFile(fileName, FileMode.Open, FileAccess.Read);
-                }
+
+                fileStream = FileInfo.OpenRead();
 
                 Size = 0;
                 Length = 0;

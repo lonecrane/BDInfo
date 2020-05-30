@@ -21,19 +21,16 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
-using DiscUtils;
-using DiscUtils.Udf;
+using BDInfo.IO;
+
+using Stream = System.IO.Stream;
+using BinaryReader = System.IO.BinaryReader;
 
 namespace BDInfo
 {
     public class TSPlaylistFile
     {
-        private DiscFileInfo DFileInfo = null;
-        private UdfReader CdReader = null;
-
-        private FileInfo FileInfo = null;
+        private IFileInfo FileInfo = null;
         public string FileType = null;
         public bool IsInitialized = false;
         public string Name = null;
@@ -71,24 +68,10 @@ namespace BDInfo
 
         public TSPlaylistFile(
             BDROM bdrom,
-            FileInfo fileInfo)
+            IFileInfo fileInfo)
         {
             BDROM = bdrom;
             FileInfo = fileInfo;
-            DFileInfo = null;
-            CdReader = null;
-            Name = fileInfo.Name.ToUpper();
-        }
-
-        public TSPlaylistFile(
-            BDROM bdrom,
-            DiscFileInfo fileInfo,
-            UdfReader reader)
-        {
-            BDROM = bdrom;
-            DFileInfo = fileInfo;
-            FileInfo = null;
-            CdReader = reader;
             Name = fileInfo.Name.ToUpper();
         }
 
@@ -244,9 +227,6 @@ namespace BDInfo
             if (!string.IsNullOrEmpty(FileInfo?.FullName))
                 return FileInfo.FullName;
 
-            if (!string.IsNullOrEmpty(DFileInfo?.FullName))
-                return DFileInfo.FullName;
-
             return string.Empty;
         }
 
@@ -254,8 +234,7 @@ namespace BDInfo
             Dictionary<string, TSStreamFile> streamFiles,
             Dictionary<string, TSStreamClipFile> streamClipFiles)
         {
-            FileStream fileStream = null;
-            Stream discFileStream = null;
+            Stream fileStream = null;
             BinaryReader fileReader = null;
             ulong streamLength = 0;
 
@@ -264,19 +243,9 @@ namespace BDInfo
                 Streams.Clear();
                 StreamClips.Clear();
 
-                if (FileInfo != null)
-                {
-                    fileStream = File.OpenRead(FileInfo.FullName);
-                    fileReader = new BinaryReader(fileStream);
-                    streamLength = (ulong)fileStream.Length;
-                }
-                else
-                {
-                    CdReader.OpenFile(DFileInfo.FullName, FileMode.Open);
-                    discFileStream = CdReader.GetFileInfo(DFileInfo.FullName).OpenRead();
-                    fileReader = new BinaryReader(discFileStream);
-                    streamLength = (ulong)discFileStream.Length;
-                }
+                fileStream = FileInfo.OpenRead();
+                fileReader = new System.IO.BinaryReader(fileStream);
+                streamLength = (ulong)fileStream.Length;
 
                 byte[] data = new byte[streamLength];
                 int dataLength = fileReader.Read(data, 0, data.Length);
@@ -538,10 +507,6 @@ namespace BDInfo
                 if (fileStream != null)
                 {
                     fileStream.Close();
-                }
-                if (discFileStream != null)
-                {
-                    discFileStream.Close();
                 }
             }
         }
